@@ -33,9 +33,20 @@ public class CabInvoiceGeneratorTest {
 
     @Test
     public void givenDistanceAndTime_InvoiceGeneratorGenerateFareForMultipleRides_ShouldReturnInvoiceDetails() {
+        String userId = "Jitu";
         Ride[] rides = {new Ride(2.0, 5), new Ride(0.1, 1)};
-        double totalFare = cabInvoiceGenerator.getTotalFare(rides);
-        InvoiceDetails invoiceDetails = cabInvoiceGenerator.getInvoiceDetails(rides);
+        cabInvoiceGenerator.addRides(userId, rides);
+        InvoiceDetails invoiceDetails = cabInvoiceGenerator.getInvoiceDetails(userId);
+        InvoiceDetails expectedDetails = new InvoiceDetails(2, 5);
+        Assert.assertEquals(invoiceDetails, expectedDetails);
+    }
+
+    @Test
+    public void givenUserId_InvoiceGeneratorGenerateFareForMultipleRides_ShouldReturnListOfInvoiceDetails() {
+        String userId = "Jitu";
+        Ride[] rides = {new Ride(2.0, 5), new Ride(0.1, 1)};
+        cabInvoiceGenerator.addRides(userId, rides);
+        InvoiceDetails invoiceDetails = cabInvoiceGenerator.getInvoiceDetails(userId);
         InvoiceDetails expectedDetails = new InvoiceDetails(2, 5);
         Assert.assertEquals(invoiceDetails, expectedDetails);
     }
