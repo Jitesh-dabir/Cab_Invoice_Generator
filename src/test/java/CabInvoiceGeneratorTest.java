@@ -8,46 +8,62 @@ public class CabInvoiceGeneratorTest {
 
     @Test
     public void givenDistanceAndTime_InvoiceGeneratorGenerateFare_ShouldReturnTotalFareForJourney() {
-        int time = 20;
-        double distance = 20.0;
-        Ride[] rides = {new Ride(2.0, 5)};
-        double totalFare = cabInvoiceGenerator.getTotalFare(rides);
-        Assert.assertEquals(25, totalFare, 0);
+        int time = 5;
+        double distance = 2.0;
+        String userId = "user";
+        Ride[] rides = {new Ride(distance, time, RideType.NORMAL)};
+        cabInvoiceGenerator.addRides(userId, rides);
+        InvoiceDetails invoiceDetails = cabInvoiceGenerator.getInvoiceDetails(userId);
+        Assert.assertEquals(25, invoiceDetails.totalFare, 0);
     }
 
     @Test
     public void givenDistanceAndTime_InvoiceGeneratorGenerateFare_ShouldReturnMinimumFareForJourney() {
         int time = 3;
         double distance = 0.1;
-        Ride[] rides = {new Ride(distance, time)};
-        double totalFare = cabInvoiceGenerator.getTotalFare(rides);
-        Assert.assertEquals(5, totalFare, 0);
+        String userId = "user";
+        Ride[] rides = {new Ride(distance, time, RideType.NORMAL)};
+        cabInvoiceGenerator.addRides(userId, rides);
+        InvoiceDetails invoiceDetails = cabInvoiceGenerator.getInvoiceDetails(userId);
+        Assert.assertEquals(5, invoiceDetails.totalFare, 0);
     }
 
     @Test
     public void givenDistanceAndTime_InvoiceGeneratorGenerateFareForMultipleRides_ShouldReturnTotalFareForJourney() {
-        Ride[] rides = {new Ride(2.0, 5), new Ride(0.1, 1)};
-        double totalFare = cabInvoiceGenerator.getTotalFare(rides);
-        Assert.assertEquals(5, totalFare, 0);
+        String userId = "user";
+        Ride[] rides = {new Ride(2.0, 5, RideType.NORMAL), new Ride(0.1, 1, RideType.NORMAL)};
+        cabInvoiceGenerator.addRides(userId, rides);
+        InvoiceDetails invoiceDetails = cabInvoiceGenerator.getInvoiceDetails(userId);
+        Assert.assertEquals(30, invoiceDetails.totalFare, 0);
     }
 
     @Test
     public void givenDistanceAndTime_InvoiceGeneratorGenerateFareForMultipleRides_ShouldReturnInvoiceDetails() {
-        String userId = "Jitu";
-        Ride[] rides = {new Ride(2.0, 5), new Ride(0.1, 1)};
+        String userId = "user";
+        Ride[] rides = {new Ride(2.0, 5, RideType.NORMAL), new Ride(0.1, 1, RideType.NORMAL)};
         cabInvoiceGenerator.addRides(userId, rides);
         InvoiceDetails invoiceDetails = cabInvoiceGenerator.getInvoiceDetails(userId);
-        InvoiceDetails expectedDetails = new InvoiceDetails(2, 5);
+        InvoiceDetails expectedDetails = new InvoiceDetails(2, 30);
         Assert.assertEquals(invoiceDetails, expectedDetails);
     }
 
     @Test
-    public void givenUserId_InvoiceGeneratorGenerateFareForMultipleRides_ShouldReturnListOfInvoiceDetails() {
-        String userId = "Jitu";
-        Ride[] rides = {new Ride(2.0, 5), new Ride(0.1, 1)};
+    public void givenUserId_InvoiceGeneratorGenerateFareForMultipleRides_ShouldReturnInvoiceDetails() {
+        String userId = "user";
+        Ride[] rides = {new Ride(2.0, 5, RideType.NORMAL), new Ride(0.1, 1, RideType.NORMAL)};
         cabInvoiceGenerator.addRides(userId, rides);
         InvoiceDetails invoiceDetails = cabInvoiceGenerator.getInvoiceDetails(userId);
-        InvoiceDetails expectedDetails = new InvoiceDetails(2, 5);
+        InvoiceDetails expectedDetails = new InvoiceDetails(2, 30);
+        Assert.assertEquals(invoiceDetails, expectedDetails);
+    }
+
+    @Test
+    public void givenDistanceTimeRideType_InvoiceGeneratorGenerateFareForRide_ShouldReturnInvoiceDetails() {
+        String userId = "user";
+        Ride[] rides = {new Ride(2.0, 5, RideType.NORMAL), new Ride(2.0, 5, RideType.PREMIUM)};
+        cabInvoiceGenerator.addRides(userId, rides);
+        InvoiceDetails invoiceDetails = cabInvoiceGenerator.getInvoiceDetails(userId);
+        InvoiceDetails expectedDetails = new InvoiceDetails(2, 65);
         Assert.assertEquals(invoiceDetails, expectedDetails);
     }
 }
