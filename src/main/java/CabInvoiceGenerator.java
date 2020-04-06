@@ -12,6 +12,12 @@ public class CabInvoiceGenerator {
         System.out.println("Welcome to cab invoice generator");
     }
 
+    public InvoiceDetails getInvoiceDetails(Ride[] rides) {
+        double totalFare = getTotalFare(rides);
+        return new InvoiceDetails(rides.length, totalFare);
+
+    }
+
     //METHOD TO GET TOTAL FARE FOR JOURNEY
     public double getTotalFare(Ride[] rides) {
         for (Ride ride : rides) {
