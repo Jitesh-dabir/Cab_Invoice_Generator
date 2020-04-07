@@ -20,7 +20,7 @@ public class CabInvoiceGenerator {
         System.out.println("Welcome to cab invoice generator");
     }
 
-    public InvoiceDetails getInvoiceDetails(String userId) {
+    public InvoiceDetails getInvoiceDetails(String userId) throws CabInvoiceException {
         ArrayList userRides = rideRepository.getRideDetails(userId);
         Ride[] rides = new Ride[userRides.size()];
         userRides.toArray(rides);
@@ -31,7 +31,9 @@ public class CabInvoiceGenerator {
     }
 
     //METHOD TO GET TOTAL FARE FOR JOURNEY
-    public double getTotalFare(double distanceInKiloMeter, int travelPerMinute, RideType type) {
+    public double getTotalFare(double distanceInKiloMeter, int travelPerMinute, RideType type) throws CabInvoiceException {
+        if(type == null)
+            throw new CabInvoiceException(CabInvoiceException.MyEXception_Type.NO_SUCH_RIDE_TYPE,"Wrong ride type");
         setValue(type);
         totalFare = distanceInKiloMeter * COST_PER_KILOMETER + travelPerMinute * COST_PER_MINUTE;
         return Math.max(MINIMUM_FARE, totalFare);
