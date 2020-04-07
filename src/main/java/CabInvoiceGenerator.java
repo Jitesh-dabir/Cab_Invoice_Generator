@@ -43,7 +43,7 @@ public class CabInvoiceGenerator {
         this.MINIMUM_FARE = type.minimumFare;
     }
 
-    public void addRides(String userId, Ride[] rides) {
+    public void addRides(String userId, Ride[] rides) throws CabInvoiceException {
         rideRepository.addRide(userId, rides);
     }
 }
