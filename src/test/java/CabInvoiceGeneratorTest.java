@@ -80,4 +80,18 @@ public class CabInvoiceGeneratorTest {
             Assert.assertEquals(CabInvoiceException.MyEXception_Type.NOT_A_VALID_USER, e.type);
         }
     }
+
+    @Test
+    public void givenDistanceTimeRideType_WhenImproperRideType_ShouldThrowException() {
+        try {
+            String userId = "user";
+            Ride[] rides = {new Ride(2.0, 5, null), new Ride(2.0, 5, RideType.PREMIUM)};
+            cabInvoiceGenerator.addRides(userId, rides);
+            InvoiceDetails invoiceDetails = cabInvoiceGenerator.getInvoiceDetails(userId);
+            InvoiceDetails expectedDetails = new InvoiceDetails(2, 65);
+            Assert.assertEquals(invoiceDetails, expectedDetails);
+        } catch (CabInvoiceException e) {
+            Assert.assertEquals(CabInvoiceException.MyEXception_Type.NO_SUCH_RIDE_TYPE, e.type);
+        }
+    }
 }
